@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>皖韵饴香 - 低糖非遗糖画项目</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Market Data Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for Classical Chinese Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'wan-bg': '#FFFDF0',
+                        'wan-paper': '#FEF9E7',
+                        'wan-yellow': '#FDE68A',
+                        'wan-gold': '#D97706',
+                        'wan-amber': '#92400E',
+                        'wan-red': '#C0392B',
+                        'wan-darkred': '#8B0000',
+                        'wan-ink': '#2C2B29',
+                        'wan-muted': '#6B5E52'
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif SC"', 'STSong', 'SimSun', 'serif'],
+                        calligraphy: ['"Ma Shan Zheng"', 'cursive', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Xuan Paper Texture background */
+        body {
+            background-color: #FFFDF0;
+            background-image: radial-gradient(#D97706 0.4px, transparent 0.4px), radial-gradient(#C0392B 0.4px, #FFFDF0 0.4px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            background-opacity: 0.03;
+            color: #2C2B29;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        /* Traditional Corner Ornament Border */
+        .gufeng-border {
+            position: relative;
+            border: 2px solid #D97706;
+        }
+        .gufeng-border::before, .gufeng-border::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #C0392B;
+        }
+        .gufeng-border::before { top: -4px; left: -4px; border-right: none; border-bottom: none; }
+        .gufeng-border::after { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+
+        /* Seal Stamp Styling */
+        .seal-stamp {
+            border: 3px solid #C0392B;
+            color: #C0392B;
+            font-family: 'Ma Shan Zheng', cursive;
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transform: rotate(-5deg);
+            box-shadow: inset 0 0 4px rgba(192, 57, 43, 0.2);
+            text-shadow: 0 0 1px rgba(192, 57, 43, 0.3);
+            user-select: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FEF9E7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D97706;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C0392B;
+        }
+
+        /* Modal Overlay Blur */
+        .modal-backdrop {
+            backdrop-filter: blur(6px);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-wan-yellow selection:text-wan-darkred">
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-wan-paper/95 backdrop-blur-md border-b-2 border-wan-gold/30 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Brand Logo & Title -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <div class="w-12 h-12 rounded-full bg-wan-red text-wan-paper flex items-center justify-center font-calligraphy text-2xl shadow-md border-2 border-wan-gold group-hover:rotate-12 transition-transform duration-300">
+                        皖
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-calligraphy text-2xl sm:text-3xl text-wan-red font-bold tracking-wider">皖韵饴香</span>
+                        </div>
+                        <p class="text-xs text-wan-amber font-semibold tracking-widest hidden sm:block">低糖非遗糖画 · 药食同源创新</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#overview" class="text-wan-ink hover:text-wan-red font-semibold transition-colors duration-200 flex items-center space-x-1">
+                        <i class="fa-solid fa-scroll text-wan-gold text-sm"></i>
+                        <span>项目概述</span>
+                    </a>
+                    <a href="#herbs" class="text-wan-ink hover:text-wan-red font-semibold transition-colors duration-200 flex items-center space-x-1">
+                        <i class="fa-solid fa-mortar-pestle text-wan-gold text-sm"></i>
+                        <span>皖药典藏</span>
+                    </a>
+                    <a href="#patterns" class="text-wan-ink hover:text-wan-red font-semibold transition-colors duration-200 flex items-center space-x-1">
+                        <i class="fa-solid fa-palette text-wan-gold text-sm"></i>
+                        <span>非遗纹样</span>
+                    </a>
+                    <a href="#shop" class="text-wan-ink hover:text-wan-red font-semibold transition-colors duration-200 flex items-center space-x-1">
+                        <i class="fa-solid fa-store text-wan-gold text-sm"></i>
+                        <span>配方定制</span>
+                    </a>
+                    <a href="#shop" class="bg-wan-red hover:bg-wan-darkred text-white px-5 py-2.5 rounded-full font-bold shadow-md hover:shadow-lg transition-all duration-300 text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>立即体验</span>
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-wan-ink hover:text-wan-red focus:outline-none p-2" aria-label="切换菜单">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-wan-paper border-b border-wan-gold/30 px-4 pt-2 pb-6 space-y-3">
+            <a href="#overview" class="block px-3 py-2 rounded-md text-base font-semibold text-wan-ink hover:bg-wan-yellow/50 hover:text-wan-red">项目概述</a>
+            <a href="#herbs" class="block px-3 py-2 rounded-md text-base font-semibold text-wan-ink hover:bg-wan-yellow/50 hover:text-wan-red">皖药典藏</a>
+            <a href="#patterns" class="block px-3 py-2 rounded-md text-base font-semibold text-wan-ink hover:bg-wan-yellow/50 hover:text-wan-red">非遗纹样</a>
+            <a href="#shop" class="block px-3 py-2 rounded-md text-base font-semibold text-wan-ink hover:bg-wan-yellow/50 hover:text-wan-red">配方定制</a>
+        </div>
+    </nav>
+
+    <!-- Hero Banner Section -->
+    <header class="relative overflow-hidden bg-gradient-to-b from-wan-paper via-wan-bg to-wan-paper pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-wan-gold/20">
+        <!-- Background Decorative Motif -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
+            <i class="fa-solid fa-fan text-[28rem] text-wan-amber animate-spin-slow"></i>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto space-y-6">
+                <!-- Tag Badge -->
+                <div class="inline-flex items-center space-x-2 bg-wan-yellow/60 border border-wan-gold/40 px-4 py-1.5 rounded-full text-wan-amber text-xs sm:text-sm font-semibold shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-wan-red animate-pulse"></span>
+                    <span>“十五五”规划 & 健康中国2030 政策响应项目</span>
+                </div>
+
+                <!-- Main Hero Title -->
+                <h1 class="text-4xl sm:text-6xl font-black text-wan-ink tracking-tight leading-tight">
+                    <span class="block font-calligraphy text-wan-red text-5xl sm:text-7xl mb-2">皖药入糖 · 减糖不减味</span>
+                    <span class="block text-2xl sm:text-4xl font-serif text-wan-amber mt-2">活态非遗新传承</span>
+                </h1>
+
+                <!-- Subtitle / Statement -->
+                <p class="text-base sm:text-xl text-wan-muted leading-relaxed font-serif">
+                    “皖韵饴香”以安徽道地药食同源药材为核心，融合食品级木糖醇与古法糖画技艺。解决传统糖画高糖、难保存、场景限与同质化四大痛点，打造“可表演、可体验、可拍照、可食用”的新中式非遗文化体验。
+                </p>
+
+                <!-- Hero Action Buttons -->
+                <div class="pt-4 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <a href="#shop" class="w-full sm:w-auto bg-wan-red hover:bg-wan-darkred text-white font-bold px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 border border-wan-gold/30">
+                        <i class="fa-solid fa-vial"></i>
+                        <span>探索低糖配方定制</span>
+                    </a>
+                    <a href="#patterns" class="w-full sm:w-auto bg-wan-paper hover:bg-wan-yellow text-wan-amber font-bold px-8 py-3.5 rounded-xl border-2 border-wan-gold/50 shadow-sm hover:shadow transition-all duration-300 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-scroll"></i>
+                        <span>浏览徽州纹样库</span>
+                    </a>
+                </div>
+
+                <!-- 4 Value Tags -->
+                <div class="pt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="bg-wan-paper/80 p-3 rounded-lg border border-wan-gold/30 shadow-xs">
+                        <div class="text-wan-red text-xl font-bold font-calligraphy"><i class="fa-solid fa-masks-theater mr-1"></i> 可表演</div>
+                        <div class="text-xs text-wan-muted mt-1">现场古法拉糖画线</div>
+                    </div>
+                    <div class="bg-wan-paper/80 p-3 rounded-lg border border-wan-gold/30 shadow-xs">
+                        <div class="text-wan-red text-xl font-bold font-calligraphy"><i class="fa-solid fa-hand-holding-heart mr-1"></i> 可体验</div>
+                        <div class="text-xs text-wan-muted mt-1">亲子文旅手作互动</div>
+                    </div>
+                    <div class="bg-wan-paper/80 p-3 rounded-lg border border-wan-gold/30 shadow-xs">
+                        <div class="text-wan-red text-xl font-bold font-calligraphy"><i class="fa-solid fa-camera-retro mr-1"></i> 可拍照</div>
+                        <div class="text-xs text-wan-muted mt-1">国潮高颜值视觉传播</div>
+                    </div>
+                    <div class="bg-wan-paper/80 p-3 rounded-lg border border-wan-gold/30 shadow-xs">
+                        <div class="text-wan-red text-xl font-bold font-calligraphy"><i class="fa-solid fa-utensils mr-1"></i> 可食用</div>
+                        <div class="text-xs text-wan-muted mt-1">低糖草本温和养护</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: Project Overview & Market Trends -->
+    <section id="overview" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <span class="text-wan-red font-bold text-sm uppercase tracking-widest block mb-1">PROJECT OVERVIEW & MARKET TRENDS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-wan-ink font-serif relative inline-block">
+                项目概述与市场趋势
+                <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-wan-red rounded-full"></span>
+            </h2>
+        </div>
+
+        <!-- Pain Points vs Innovations Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <!-- Left Card: Four Traditional Pain Points -->
+            <div class="bg-wan-paper rounded-2xl p-6 sm:p-8 gufeng-border shadow-md">
+                <div class="flex items-center space-x-3 mb-6 border-b border-wan-gold/30 pb-4">
+                    <div class="w-10 h-10 rounded-full bg-wan-red/10 text-wan-red flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-wan-ink">传统糖画四大痛点</h3>
+                        <p class="text-xs text-wan-muted">Traditional Sugar Painting Challenges</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-wan-bg p-4 rounded-xl border border-wan-gold/20">
+                        <div class="font-bold text-wan-red text-sm mb-1"><i class="fa-solid fa-cubes-stacked mr-1"></i> 1. 高糖不健康</div>
+                        <p class="text-xs text-wan-muted">传统蔗糖升糖快、易龋齿，难以满足现代人群控糖健康需求。</p>
+                    </div>
+                    <div class="bg-wan-bg p-4 rounded-xl border border-wan-gold/20">
+                        <div class="font-bold text-wan-red text-sm mb-1"><i class="fa-solid fa-temperature-arrow-up mr-1"></i> 2. 易潮解难保存</div>
+                        <p class="text-xs text-wan-muted">对环境温湿度极度敏感，难以进行预包装与远距离文旅运输。</p>
+                    </div>
+                    <div class="bg-wan-bg p-4 rounded-xl border border-wan-gold/20">
+                        <div class="font-bold text-wan-red text-sm mb-1"><i class="fa-solid fa-store-slash mr-1"></i> 3. 消费场景受限</div>
+                        <p class="text-xs text-wan-muted">多局限于街头即时摆摊，缺乏线上电商、伴手礼与机构定制渠道。</p>
+                    </div>
+                    <div class="bg-wan-bg p-4 rounded-xl border border-wan-gold/20">
+                        <div class="font-bold text-wan-red text-sm mb-1"><i class="fa-solid fa-clone mr-1"></i> 4. 纹样同质化</div>
+                        <p class="text-xs text-wan-muted">图案形式单一缺少地域文化承载，无法形成品牌化IP溢价。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Card: "Wanyun Yixiang" Core Innovation Solution -->
+            <div class="bg-wan-paper rounded-2xl p-6 sm:p-8 gufeng-border shadow-md">
+                <div class="flex items-center space-x-3 mb-6 border-b border-wan-gold/30 pb-4">
+                    <div class="w-10 h-10 rounded-full bg-wan-gold/20 text-wan-amber flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-wan-ink">“皖韵饴香”创新破局</h3>
+                        <p class="text-xs text-wan-muted">Innovative Value Proposition</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3 bg-wan-bg p-3.5 rounded-xl border border-wan-gold/20">
+                        <span class="bg-wan-gold text-white font-bold text-xs px-2 py-1 rounded">基质革新</span>
+                        <p class="text-xs sm:text-sm text-wan-ink">采用<strong>食品级木糖醇</strong>全面替代蔗糖，通过低温熬制技术降低热量，控糖人群与儿童无负担享受。</p>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-wan-bg p-3.5 rounded-xl border border-wan-gold/20">
+                        <span class="bg-wan-red text-white font-bold text-xs px-2 py-1 rounded">草本赋能</span>
+                        <p class="text-xs sm:text-sm text-wan-ink">萃取<strong>岳西茯苓、滁菊/贡菊、宣木瓜</strong>等皖药精华，打造儿童护脾胃、青年舒缓解压、中老年清润养生三款功能配方。</p>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-wan-bg p-3.5 rounded-xl border border-wan-gold/20">
+                        <span class="bg-wan-amber text-white font-bold text-xs px-2 py-1 rounded">徽韵立意</span>
+                        <p class="text-xs sm:text-sm text-wan-ink">建立包含<strong>马头墙、花窗、凤画、祥龙等8大安徽非遗纹样库</strong>，构建“非遗展示—低糖产品—定制服务—皖药溯源”产业链。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Size Chart Container -->
+        <div class="bg-wan-paper rounded-2xl p-6 sm:p-8 border-2 border-wan-gold/40 shadow-lg">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <span class="seal-stamp text-xs mb-2">行业前景</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-wan-ink font-serif">亚太及中国药食同源/蜂蜜糖果市场规模趋势 (2019-2032)</h3>
+                    <p class="text-xs text-wan-muted mt-1">数据来源：行业研究报告与药食同源消费蓝皮书 (单位：十亿美元 USD Billion)</p>
+                </div>
+                <div class="flex items-center space-x-4 text-xs font-semibold">
+                    <span class="flex items-center"><span class="w-3 h-3 bg-wan-gold rounded-xs mr-1.5"></span> 历史数据</span>
+                    <span class="flex items-center"><span class="w-3 h-3 bg-wan-red rounded-xs mr-1.5"></span> 预测增长</span>
+                </div>
+            </div>
+
+            <!-- Chart Canvas Container -->
+            <div class="relative h-72 sm:h-96 w-full">
+                <canvas id="marketChart"></canvas>
+            </div>
+            <div class="mt-4 pt-4 border-t border-wan-gold/20 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs text-wan-muted">
+                <div>2022年节点: <span class="font-bold text-wan-amber">8.53 Billion</span></div>
+                <div>2023年节点: <span class="font-bold text-wan-amber">8.94 Billion</span></div>
+                <div>2026年预估: <span class="font-bold text-wan-amber">10.42 Billion</span></div>
+                <div>2032年远景: <span class="font-bold text-wan-red">13.85 Billion</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Anhui Herbal Medicine Knowledge (2025 Pharmacopoeia Style) -->
+    <section id="herbs" class="py-20 bg-wan-paper/60 border-y border-wan-gold/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <div class="inline-block bg-wan-red text-white text-xs font-bold px-3 py-1 rounded-full mb-2 tracking-widest">
+                    《中华人民共和国药典》2025年版 一部 典籍依据
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-wan-ink font-serif relative inline-block block">
+                    皖药典藏 · 道地食材
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-wan-red rounded-full"></span>
+                </h2>
+                <p class="text-sm text-wan-muted mt-4 max-w-2xl mx-auto">精选安徽道地药食同源中药材，点击下方药材卡片可在“药典原文切片”与“现代营养与糖画应用”之间切换查看。</p>
+            </div>
+
+            <!-- 3 Herbs Interactive Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Herb 1: 茯苓 (Fuling) -->
+                <div class="bg-wan-bg rounded-2xl border-2 border-wan-gold/40 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col">
+                    <!-- Image Area -->
+                    <div class="relative h-56 bg-wan-yellow/30 overflow-hidden border-b border-wan-gold/30">
+                        <img src="./images/fuling.jpg" alt="岳西茯苓" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://placehold.co/600x400/FEF9E7/92400E?text=%E5%B2%B3%E8%A5%BF%E8%8C%AF%E8%8B%9A+(Fuling)';">
+                        <div class="absolute top-3 right-3 bg-wan-red text-white text-xs font-bold px-2.5 py-1 rounded shadow">
+                            岳西道地
+                        </div>
+                        <div class="absolute bottom-3 left-3 bg-wan-ink/80 text-white text-xs font-serif px-3 py-1 rounded-md backdrop-blur-xs">
+                            Poria cocos (Schw.) Wolf
+                        </div>
+                    </div>
+
+                    <!-- Content & Interactive Tabs -->
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-2xl font-bold text-wan-ink font-serif">茯苓 <span class="text-sm text-wan-amber font-normal">(岳西茯苓)</span></h3>
+                                <div class="flex space-x-1 bg-wan-paper p-1 rounded-lg border border-wan-gold/30 text-xs">
+                                    <button onclick="toggleHerbTab('fuling', 'yaodian')" id="fuling-btn-yaodian" class="px-2.5 py-1 rounded-md font-bold bg-wan-gold text-white shadow-xs">药典切片</button>
+                                    <button onclick="toggleHerbTab('fuling', 'app')" id="fuling-btn-app" class="px-2.5 py-1 rounded-md text-wan-muted hover:text-wan-ink">糖画应用</button>
+                                </div>
+                            </div>
+
+                            <!-- Content Switcher -->
+                            <div id="fuling-yaodian" class="text-xs text-wan-ink space-y-2 leading-relaxed bg-wan-paper p-4 rounded-xl border border-wan-gold/20">
+                                <p class="font-bold text-wan-red mb-1">【2025药典原文切片】</p>
+                                <p>本品为多孔菌科真菌茯苓<i>Poria cocos</i>的干燥菌核。多于7~9月采挖，挖出后除去泥沙，堆置“发汗”后，摊开晾至表面干燥，再“发汗”，反复数次至现皱纹、内部水分大部散失后，阴干，称为“茯苓个”。</p>
+                                <p class="pt-1 text-wan-amber font-semibold">【性状】呈类球形、椭圆形或不规则团块。体重，质坚实，断面颗粒性，内部白色，味淡，嚼之粘牙。</p>
+                            </div>
+
+                            <div id="fuling-app" class="hidden text-xs text-wan-ink space-y-2 leading-relaxed bg-wan-paper p-4 rounded-xl border border-wan-gold/20">
+                                <p class="font-bold text-wan-gold mb-1">【现代营养与低糖糖画运用】</p>
+                                <p><strong>核心功效：</strong> 健脾宁心、利水渗湿，温和食补。</p>
+                                <p><strong>糖画运用：</strong> 将茯苓经过超微粉碎提纯为微米级茯苓粉，在熬糖后期均匀分散于木糖醇基质中，赋予糖画微甘口感与独特温润质感，解决儿童脾胃虚弱问题。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Herb 2: 菊花 (Chuju / Gongju) -->
+                <div class="bg-wan-bg rounded-2xl border-2 border-wan-gold/40 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col">
+                    <!-- Image Area -->
+                    <div class="relative h-56 bg-wan-yellow/30 overflow-hidden border-b border-wan-gold/30">
+                        <img src="./images/juhua.jpg" alt="滁菊/贡菊" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://placehold.co/600x400/FEF9E7/92400E?text=%E6%BB%80%E8%8F%8A%2F%E8%B4%A1%E8%8F%8A+(Chrysanthemum)';">
+                        <div class="absolute top-3 right-3 bg-wan-red text-white text-xs font-bold px-2.5 py-1 rounded shadow">
+                            滁州/黄山道地
+                        </div>
+                        <div class="absolute bottom-3 left-3 bg-wan-ink/80 text-white text-xs font-serif px-3 py-1 rounded-md backdrop-blur-xs">
+                            Chrysanthemum morifolium Ramat.
+                        </div>
+                    </div>
+
+                    <!-- Content & Interactive Tabs -->
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-2xl font-bold text-wan-ink font-serif">菊花 <span class="text-sm text-wan-amber font-normal">(滁菊/贡菊)</span></h3>
+                                <div class="flex space-x-1 bg-wan-paper p-1 rounded-lg border border-wan-gold/30 text-xs">
+                                    <button onclick="toggleHerbTab('juhua', 'yaodian')" id="juhua-btn-yaodian" class="px-2.5 py-1 rounded-md font-bold bg-wan-gold text-white shadow-xs">药典切片</button>
+                                    <button onclick="toggleHerbTab('juhua', 'app')" id="juhua-btn-app" class="px-2.5 py-1 rounded-md text-wan-muted hover:text-wan-ink">糖画应用</button>
+                                </div>
+                            </div>
+
+                            <!-- Content Switcher -->
+                            <div id="juhua-yaodian" class="text-xs text-wan-ink space-y-2 leading-relaxed bg-wan-paper p-4 rounded-xl border border-wan-gold/20">
+                                <p class="font-bold text-wan-red mb-1">【2025药典原文切片】</p>
+                                <p>本品为菊科植物菊<i>Chrysanthemum morifolium</i>的干燥头状花序。9~11月花盛开时分批采收，阴干或焙干。按产地和加工方法不同，分为“滁菊”、“贡菊”、“亳菊”、“杭菊”。</p>
+                                <p class="pt-1 text-wan-amber font-semibold">【性状】滁菊呈不规则球形，舌状花类白色，不规则扭曲；贡菊舌状花白色，斜升，上部反折。</p>
+                            </div>
+
+                            <div id="juhua-app" class="hidden text-xs text-wan-ink space-y-2 leading-relaxed bg-wan-paper p-4 rounded-xl border border-wan-gold/20">
+                                <p class="font-bold text-wan-gold mb-1">【现代营养与低糖糖画运用】</p>
+                                <p><strong>核心功效：</strong> 散风清热、平肝明目、理气舒郁。</p>
+                                <p><strong>糖画运用：</strong> 低温冷萃获取贡菊/滁菊富含黄酮的高纯滤液，用作熬糖的天然香气与活性澄清溶剂，呈色清新自然，带给年轻群体舒缓解压、清香回甘的口感。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Herb 3: 宣木瓜 (Mugua) -->
+                <div class="bg-wan-bg rounded-2xl border-2 border-wan-gold/40 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col">
+                    <!-- Image Area -->
+                    <div class="relative h-56 bg-wan-yellow/30 overflow-hidden border-b border-wan-gold/30">
+                        <img src="./images/mugua.jpg" alt="宣城宣木瓜" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://placehold.co/600x400/FEF9E7/92400E?text=%E5%AE%A3%E6%9C%A8%E7%93%9C+(Chaenomeles)';">
+                        <div class="absolute top-3 right-3 bg-wan-red text-white text-xs font-bold px-2.5 py-1 rounded shadow">
+                            宣城道地
+                        </div>
+                        <div class="absolute bottom-3 left-3 bg-wan-ink/80 text-white text-xs font-serif px-3 py-1 rounded-md backdrop-blur-xs">
+                            Chaenomeles speciosa (Sweet) Nakai
+                        </div>
+                    </div>
+
+                    <!-- Content & Interactive Tabs -->
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-2xl font-bold text-wan-ink font-serif">木瓜 <span class="text-sm text-wan-amber font-normal">(安徽宣木瓜)</span></h3>
+                                <div class="flex space-x-1 bg-wan-paper p-1 rounded-lg border border-wan-gold/30 text-xs">
+                                    <button onclick="toggleHerbTab('mugua', 'yaodian')" id="mugua-btn-yaodian" class="px-2.5 py-1 rounded-md font-bold bg-wan-gold text-white shadow-xs">药典切片</button>
+                                    <button onclick="toggleHerbTab('mugua', 'app')" id="mugua-btn-app" class="px-2.5 py-1 rounded-md text-wan-muted hover:text-wan-ink">糖画应用</button>
+                                </div>
+                            </div>
+
+                            <!-- Content Switcher -->
+                            <div id="mugua-yaodian" class="text-xs text-wan-ink space-y-2 leading-relaxed bg-wan-paper p-4 rounded-xl border border-wan-gold/20">
+                                <p class="font-bold text-wan-red mb-1">【2025药典原文切片】</p>
+                                <p>本品为蔷薇科植物贴梗海棠<i>Chaenomeles speciosa</i>的干燥近成熟果实。夏、秋二季果实绿黄时采收，置沸水中烫至外皮灰白色，对半纵剖，晒干。</p>
+                                <p class="pt-1 text-wan-amber font-semibold">【性状】外表面紫红色或红棕色，有不规则深皱纹；剖面果肉红棕色。气微清香，味酸。</p>
+                            </div>
+
+                            <div id="mugua-app" class="hidden text-xs text-wan-ink space-y-2 leading-relaxed bg-wan-paper p-4 rounded-xl border border-wan-gold/20">
+                                <p class="font-bold text-wan-gold mb-1">【现代营养与低糖糖画运用】</p>
+                                <p><strong>核心功效：</strong> 舒筋活络、和胃化湿、润肺生津。</p>
+                                <p><strong>糖画运用：</strong> 提炼宣木瓜高浓缩浸膏，富含齐墩果酸与有机酸。为糖画注入天然果酸风味，平衡甜度，开胃消食，适合中老年及儿童温和调理。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Intangible Cultural Heritage Patterns (非遗纹样图案库) -->
+    <section id="patterns" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <span class="text-wan-red font-bold text-sm uppercase tracking-widest block mb-1">INTANGIBLE CULTURAL HERITAGE PATTERNS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-wan-ink font-serif relative inline-block">
+                徽州非遗纹样图案库
+                <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-wan-red rounded-full"></span>
+            </h2>
+            <p class="text-sm text-wan-muted mt-4 max-w-2xl mx-auto">融汇安徽建筑、山水风光与民俗瑞兽，让每一幅糖画都承载深厚的非遗文化故事。（点击查看大图与深度释义）</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex justify-center mb-10">
+            <div class="inline-flex bg-wan-paper p-1.5 rounded-full border border-wan-gold/40 shadow-xs space-x-2">
+                <button onclick="filterPatterns('all')" id="filter-all" class="px-5 py-2 rounded-full text-xs sm:text-sm font-bold bg-wan-red text-white shadow-xs transition-all">全部纹样 (8款)</button>
+                <button onclick="filterPatterns('arch')" id="filter-arch" class="px-5 py-2 rounded-full text-xs sm:text-sm font-semibold text-wan-muted hover:text-wan-ink transition-all">徽州建筑与山水</button>
+                <button onclick="filterPatterns('beast')" id="filter-beast" class="px-5 py-2 rounded-full text-xs sm:text-sm font-semibold text-wan-muted hover:text-wan-ink transition-all">祥禽瑞兽与传统团花</button>
+            </div>
+        </div>
+
+        <!-- 8 Patterns Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="pattern-grid">
+            <!-- Pattern 1 -->
+            <div class="pattern-card arch bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(1)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern1.jpg" alt="徽檐寄梦" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E5%BE%BD%E6%AA%90%E5%AF%84%E6%A2%A6+(Pattern+1)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2 py-0.5 rounded">01</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">徽州建筑</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【徽檐寄梦】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">徽派古民居建筑意象</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">取徽州马头墙古宅意象，一檐藏皖山乡愁，寄古村雅韵。</p>
+                </div>
+            </div>
+
+            <!-- Pattern 2 -->
+            <div class="pattern-card arch bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(2)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern2.jpg" alt="锦窗凝瑞" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E9%94%A6%E7%AA%97%E5%87%9D%E7%91%9E+(Pattern+2)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2 py-0.5 rounded">02</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">徽州建筑</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【锦窗凝瑞】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">花窗如意纹样</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">取材徽州木雕花窗，回环锦纹，凝纳祥瑞，寓意平安喜乐。</p>
+                </div>
+            </div>
+
+            <!-- Pattern 3 -->
+            <div class="pattern-card arch bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(3)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern3.jpg" alt="皖山云涧" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E7%9A%96%E5%B1%B1%E4%BA%91%E6%B6%AF+(Pattern+3)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2 py-0.5 rounded">03</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">山水风光</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【皖山云涧】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">山水亭台图</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">黄山徽山、溪涧亭台，取“云生山谷，山水入画”，展现安徽山水风光。</p>
+                </div>
+            </div>
+
+            <!-- Pattern 4 -->
+            <div class="pattern-card arch bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(4)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern4.jpg" alt="万序归宁" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E4%B8%87%E5%BA%8F%E5%BD%B2%E2%BD%AE+(Pattern+4)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2 py-0.5 rounded">04</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">传统团花</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【万序归宁】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">万字回纹团花</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">源自徽州石刻万字纹，绵绵不绝，万物有序，祈愿安宁和顺。</p>
+                </div>
+            </div>
+
+            <!-- Pattern 5 -->
+            <div class="pattern-card beast bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(5)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern5.jpg" alt="丹凤栖枝" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E4%B8%B9%E5%87%A4%E6%A0%96%E6%9E%9D+(Pattern+5)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2 py-0.5 rounded">05</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">凤阳凤画</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【丹凤栖枝】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">凤凰花鸟纹样</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">凤栖花枝，彩凤呈祥，取材安徽凤阳凤画非遗元素，象征吉庆、风华。</p>
+                </div>
+            </div>
+
+            <!-- Pattern 6 -->
+            <div class="pattern-card beast bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(6)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern6.jpg" alt="鹿衔芳华" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E9%B9%BF%E8%A1%94%E8%8A%B3%E5%8D%8E+(Pattern+6)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2.5 py-0.5 rounded">06</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">祥禽瑞兽</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【鹿衔芳华】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">瑞鹿牡丹纹样</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">瑞鹿衔花，“鹿”通禄，牡丹喻芳华，福寿吉祥。</p>
+                </div>
+            </div>
+
+            <!-- Pattern 7 -->
+            <div class="pattern-card beast bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(7)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern7.jpg" alt="潜龙启澜" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E6%BD%9C%E9%BE%99%E5%90%AF%E6%BE%9C+(Pattern+7)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2 py-0.5 rounded">07</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">祥龙纹样</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【潜龙启澜】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">祥龙云浪纹样</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">潜龙起势，云浪相伴，乘风破浪，寓意新生与奋进。</p>
+                </div>
+            </div>
+
+            <!-- Pattern 8 -->
+            <div class="pattern-card beast bg-wan-paper rounded-xl border border-wan-gold/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer" onclick="openPatternModal(8)">
+                <div class="relative h-52 bg-wan-yellow/20 overflow-hidden">
+                    <img src="./images/pattern8.jpg" alt="月轮呈祥" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E6%9C%88%E8%BD%AE%E5%91%88%E7%A5%A5+(Pattern+8)';">
+                    <span class="absolute top-2 left-2 bg-wan-red/90 text-white text-xs font-bold px-2 py-0.5 rounded">08</span>
+                    <span class="absolute top-2 right-2 bg-wan-paper/90 text-wan-amber text-xs font-semibold px-2 py-0.5 rounded">传统团花</span>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-lg text-wan-ink font-serif group-hover:text-wan-red transition-colors">【月轮呈祥】</h4>
+                    <p class="text-xs text-wan-amber font-semibold mt-0.5">圆月云纹团花</p>
+                    <p class="text-xs text-wan-muted mt-2 line-clamp-2">云纹环绕月轮，月圆圆满，云卷云舒，阖家圆满。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Product Selection & Customization (配方定制与选购) -->
+    <section id="shop" class="py-20 bg-wan-paper/80 border-t border-wan-gold/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-12">
+                <span class="seal-stamp text-xs mb-2">表3.2 低糖皖药糖画产品系列配方</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-wan-ink font-serif relative inline-block block mt-1">
+                    配方选购与交互定制
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-wan-red rounded-full"></span>
+                </h2>
+                <p class="text-sm text-wan-muted mt-4 max-w-2xl mx-auto">选择人群定位款，匹配心仪非遗纹样，实时定制生成专属低糖非遗糖画礼盒。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Left Control Form: 7 columns -->
+                <div class="lg:col-span-7 bg-wan-bg p-6 sm:p-8 rounded-2xl border-2 border-wan-gold/40 shadow-md">
+                    <!-- Step 1: Select Formula Target Group -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-bold text-wan-ink mb-3 flex items-center space-x-2">
+                            <span class="w-6 h-6 rounded-full bg-wan-red text-white flex items-center justify-center text-xs">1</span>
+                            <span>选择功效定位人群款</span>
+                        </label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <button onclick="selectFormula('kids')" id="form-btn-kids" class="formula-btn active p-4 rounded-xl border-2 border-wan-red bg-wan-paper text-left transition-all">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-wan-red text-sm">儿童护脾胃款</span>
+                                    <i class="fa-solid fa-child text-wan-gold"></i>
+                                </div>
+                                <p class="text-[11px] text-wan-muted mt-2">茯苓粉 + 宣木瓜浸膏</p>
+                                <p class="text-[10px] text-wan-amber font-semibold mt-1">温和食补 · 健脾养胃</p>
+                            </button>
+
+                            <button onclick="selectFormula('youth')" id="form-btn-youth" class="formula-btn p-4 rounded-xl border-2 border-wan-gold/30 bg-wan-paper text-left hover:border-wan-gold transition-all">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-wan-ink text-sm">青年舒缓解压款</span>
+                                    <i class="fa-solid fa-mug-hot text-wan-gold"></i>
+                                </div>
+                                <p class="text-[11px] text-wan-muted mt-2">贡菊滤液 + 茯苓粉</p>
+                                <p class="text-[10px] text-wan-amber font-semibold mt-1">理气舒郁 · 清香回甘</p>
+                            </button>
+
+                            <button onclick="selectFormula('elder')" id="form-btn-elder" class="formula-btn p-4 rounded-xl border-2 border-wan-gold/30 bg-wan-paper text-left hover:border-wan-gold transition-all">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-wan-ink text-sm">中老年清润养生款</span>
+                                    <i class="fa-solid fa-heart-pulse text-wan-gold"></i>
+                                </div>
+                                <p class="text-[11px] text-wan-muted mt-2">宣木瓜浸膏 + 贡菊滤液</p>
+                                <p class="text-[10px] text-wan-amber font-semibold mt-1">润肺生津 · 开胃消食</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Select ICH Pattern (1-8) -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-bold text-wan-ink mb-3 flex items-center space-x-2">
+                            <span class="w-6 h-6 rounded-full bg-wan-red text-white flex items-center justify-center text-xs">2</span>
+                            <span>选择雕刻非遗纹样 (1-8号)</span>
+                        </label>
+                        <div class="grid grid-cols-4 sm:grid-cols-8 gap-2" id="pattern-picker">
+                            <!-- JS populates pattern pickers -->
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Packaging & Quantity -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <div>
+                            <label class="block text-sm font-bold text-wan-ink mb-2">包装规格</label>
+                            <select id="package-type" onchange="updateCustomizer()" class="w-full bg-wan-paper border border-wan-gold/50 rounded-xl px-3 py-2.5 text-sm text-wan-ink focus:outline-none focus:border-wan-red">
+                                <option value="box">国潮礼盒装 (6支/盒)</option>
+                                <option value="single">单支体验装 (1支/袋)</option>
+                                <option value="gift">文旅伴手礼尊享装 (12支/箱)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-wan-ink mb-2">订购数量</label>
+                            <div class="flex items-center space-x-3 bg-wan-paper border border-wan-gold/50 rounded-xl px-3 py-1.5">
+                                <button onclick="adjustQty(-1)" class="w-8 h-8 rounded-lg bg-wan-yellow/60 text-wan-amber font-bold text-lg hover:bg-wan-yellow flex items-center justify-center">-</button>
+                                <span id="custom-qty" class="font-bold text-wan-ink flex-1 text-center">1</span>
+                                <button onclick="adjustQty(1)" class="w-8 h-8 rounded-lg bg-wan-yellow/60 text-wan-amber font-bold text-lg hover:bg-wan-yellow flex items-center justify-center">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price & Checkout CTA -->
+                    <div class="pt-6 border-t border-wan-gold/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div>
+                            <span class="text-xs text-wan-muted">估算预订金额</span>
+                            <div class="text-3xl font-black text-wan-red font-serif">
+                                ¥ <span id="total-price">38.00</span>
+                            </div>
+                        </div>
+                        <button onclick="submitOrder()" class="w-full sm:w-auto bg-wan-red hover:bg-wan-darkred text-white font-bold px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-stamp"></i>
+                            <span>立即提交预订单</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Live Preview Card: 5 columns -->
+                <div class="lg:col-span-5 bg-wan-paper p-6 sm:p-8 rounded-2xl gufeng-border shadow-lg relative sticky top-28">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="seal-stamp text-xs">实时定制预览</span>
+                        <span class="text-xs text-wan-muted font-mono" id="preview-code">CODE: WAN-2026-01</span>
+                    </div>
+
+                    <!-- Product Image Card -->
+                    <div class="relative h-64 bg-wan-yellow/30 rounded-xl overflow-hidden border border-wan-gold/40 mb-6 flex items-center justify-center p-4">
+                        <img id="preview-img" src="./images/pattern1.jpg" alt="纹样预览" class="max-h-full max-w-full object-contain filter drop-shadow-md" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=%E7%B3%96%E7%94%BB%E5%AE%9A%E5%88%B6%E9%A2%84%E8%A7%86';">
+                        <div class="absolute bottom-2 right-2 bg-wan-ink/75 text-white text-[10px] px-2 py-0.5 rounded">
+                            木糖醇透明金黄糖丝
+                        </div>
+                    </div>
+
+                    <!-- Formula & Specs Details -->
+                    <div class="space-y-3 border-t border-wan-gold/20 pt-4">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-wan-muted">选定产品款式：</span>
+                            <span class="font-bold text-wan-red" id="preview-formula-title">儿童护脾胃款</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-wan-muted">核心配方成分：</span>
+                            <span class="font-semibold text-wan-ink" id="preview-ingredients">茯苓粉 + 宣木瓜浸膏</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-wan-muted">功效定位描述：</span>
+                            <span class="font-semibold text-wan-amber" id="preview-effect">温和食补、健脾养胃</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-wan-muted">搭载非遗纹样：</span>
+                            <span class="font-bold text-wan-ink" id="preview-pattern-name">01. 【徽檐寄梦】</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-wan-muted">口感特征：</span>
+                            <span class="font-semibold text-wan-muted" id="preview-taste">口感清甜，低糖无负担</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-wan-ink text-wan-paper pt-16 pb-12 border-t-4 border-wan-red">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-10 h-10 rounded-full bg-wan-red text-white flex items-center justify-center font-calligraphy text-xl border border-wan-gold">皖</div>
+                        <span class="font-calligraphy text-2xl text-wan-yellow font-bold">皖韵饴香</span>
+                    </div>
+                    <p class="text-xs text-wan-paper/70 leading-relaxed">
+                        基于安徽道地药食同源中药材的低糖非遗糖画创制与产业链活化项目。
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-serif font-bold text-wan-yellow mb-4">板块快速导航</h4>
+                    <ul class="space-y-2 text-xs text-wan-paper/80">
+                        <li><a href="#overview" class="hover:text-wan-yellow">项目概述与市场趋势</a></li>
+                        <li><a href="#herbs" class="hover:text-wan-yellow">2025版药典草本科普</a></li>
+                        <li><a href="#patterns" class="hover:text-wan-yellow">徽州非遗纹样图案库</a></li>
+                        <li><a href="#shop" class="hover:text-wan-yellow">低糖配方在线交互定制</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-serif font-bold text-wan-yellow mb-4">皖药道地产区</h4>
+                    <ul class="space-y-2 text-xs text-wan-paper/80">
+                        <li><i class="fa-solid fa-location-dot text-wan-red mr-1"></i> 安徽岳西 - 茯苓基地</li>
+                        <li><i class="fa-solid fa-location-dot text-wan-red mr-1"></i> 安徽滁州/黄山 - 菊花产区</li>
+                        <li><i class="fa-solid fa-location-dot text-wan-red mr-1"></i> 安徽宣城 - 宣木瓜基地</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-serif font-bold text-wan-yellow mb-4">参赛与知识产权</h4>
+                    <p class="text-xs text-wan-paper/70 leading-relaxed mb-2">
+                        预期成果：3款功能样品、徽州纹样库、企业标准草案及营销模式。
+                    </p>
+                    <p class="text-[10px] text-wan-paper/50">
+                        © 2026 “皖韵饴香”创新创业团队. All Rights Reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals Container -->
+
+    <!-- Pattern Detail Modal -->
+    <div id="pattern-modal" class="fixed inset-0 z-50 hidden modal-backdrop bg-wan-ink/70 flex items-center justify-center p-4">
+        <div class="bg-wan-paper rounded-2xl max-w-2xl w-full p-6 sm:p-8 gufeng-border shadow-2xl relative animate-fade-in max-h-[90vh] overflow-y-auto">
+            <button onclick="closePatternModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-wan-red/10 text-wan-red font-bold hover:bg-wan-red hover:text-white transition-colors flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="pattern-modal-content">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Stamp Success Modal -->
+    <div id="order-modal" class="fixed inset-0 z-50 hidden modal-backdrop bg-wan-ink/70 flex items-center justify-center p-4">
+        <div class="bg-wan-paper rounded-2xl max-w-md w-full p-6 sm:p-8 gufeng-border shadow-2xl relative text-center">
+            <div class="w-16 h-16 rounded-full bg-wan-red/10 text-wan-red text-3xl flex items-center justify-center mx-auto mb-4 border-2 border-wan-red">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="seal-stamp text-lg mb-2">【预订成功】</div>
+            <h3 class="text-2xl font-bold text-wan-ink font-serif mb-2">“皖韵饴香”定制单已生成</h3>
+            <p class="text-xs text-wan-muted mb-6">感谢您对低糖非遗糖画创新项目的支持！</p>
+            
+            <div class="bg-wan-bg p-4 rounded-xl border border-wan-gold/30 text-left text-xs space-y-2 mb-6 font-mono">
+                <div>订单编号：<span id="modal-order-id" class="font-bold text-wan-red">WAN-2026-9812</span></div>
+                <div>款式：<span id="modal-order-formula" class="text-wan-ink">儿童护脾胃款</span></div>
+                <div>纹样：<span id="modal-order-pattern" class="text-wan-ink">01. 徽檐寄梦</span></div>
+                <div>金额：<span id="modal-order-price" class="font-bold text-wan-red">¥ 38.00</span></div>
+            </div>
+
+            <button onclick="closeOrderModal()" class="w-full bg-wan-red text-white font-bold py-3 rounded-xl shadow hover:bg-wan-darkred transition-colors">
+                确定并返回
+            </button>
+        </div>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        // Data Store
+        const patternData = [
+            {
+                id: 1,
+                name: "【徽檐寄梦】",
+                sub: "徽派古民居建筑",
+                cat: "arch",
+                desc: "取徽州马头墙古宅意象，一檐藏皖山乡愁，寄古村雅韵。利用拉糖线描刻画出高低错落的阶梯状墙头，寓意步步高升与故土安康。",
+                img: "./images/pattern1.jpg"
+            },
+            {
+                id: 2,
+                name: "【锦窗凝瑞】",
+                sub: "花窗如意纹样",
+                cat: "arch",
+                desc: "取材徽州木雕花窗，回环锦纹，凝纳祥瑞，寓意平安喜乐。多阶镂空线条精细考究，考验非遗手艺人拉糖温控技巧。",
+                img: "./images/pattern2.jpg"
+            },
+            {
+                id: 3,
+                name: "【皖山云涧】",
+                sub: "山水亭台图",
+                cat: "arch",
+                desc: "黄山徽山、溪涧亭台，取“云生山谷，山水入画”，展现安徽山水风光。云雾腾绕间，山石亭阁栩栩如生。",
+                img: "./images/pattern3.jpg"
+            },
+            {
+                id: 4,
+                name: "【万序归宁】",
+                sub: "万字回纹团花",
+                cat: "arch",
+                desc: "源自徽州石刻万字纹，绵绵不绝，万物有序，祈愿安宁和顺。圆环团花构造展现中国传统对称哲学。",
+                img: "./images/pattern4.jpg"
+            },
+            {
+                id: 5,
+                name: "【丹凤栖枝】",
+                sub: "凤凰花鸟纹样（凤阳凤画）",
+                cat: "beast",
+                desc: "凤栖花枝，彩凤呈祥，取材安徽凤阳凤画非遗元素，象征吉庆、风华。线条流畅华丽，极富东方美学冲击力。",
+                img: "./images/pattern5.jpg"
+            },
+            {
+                id: 6,
+                name: "【鹿衔芳华】",
+                sub: "瑞鹿牡丹纹样",
+                cat: "beast",
+                desc: "瑞鹿衔花，“鹿”通禄，牡丹喻芳华，福寿吉祥。将灵鹿姿态与盛开牡丹融为一体，寄托功名利禄与美好生活。",
+                img: "./images/pattern6.jpg"
+            },
+            {
+                id: 7,
+                name: "【潜龙启澜】",
+                sub: "祥龙纹样",
+                cat: "beast",
+                desc: "潜龙起势，云浪相伴，乘风破浪，寓意新生与奋进。巨龙腾云驾雾，充满生机与力量。",
+                img: "./images/pattern7.jpg"
+            },
+            {
+                id: 8,
+                name: "【月轮呈祥】",
+                sub: "圆月云纹团花",
+                cat: "beast",
+                desc: "云纹环绕月轮，月圆圆满，云卷云舒，阖家圆满。意境优雅，极具团圆祥瑞祝福。",
+                img: "./images/pattern8.jpg"
+            }
+        ];
+
+        const formulaData = {
+            kids: {
+                title: "儿童护脾胃款",
+                group: "儿童",
+                ingredients: "茯苓粉 + 宣木瓜浸膏",
+                effect: "温和食补、健脾养胃",
+                taste: "口感清甜，低糖无负担",
+                basePrice: 38
+            },
+            youth: {
+                title: "青年舒缓解压款",
+                group: "年轻群体",
+                ingredients: "贡菊滤液 + 茯苓粉",
+                effect: "理气舒郁",
+                taste: "清香回甘，颜值色彩清新",
+                basePrice: 42
+            },
+            elder: {
+                title: "中老年清润养生款",
+                group: "中老年",
+                ingredients: "宣木瓜浸膏 + 贡菊滤液",
+                effect: "润肺生津、开胃消食",
+                taste: "温润不燥热",
+                basePrice: 45
+            }
+        };
+
+        // State Store
+        let state = {
+            formula: 'kids',
+            patternId: 1,
+            packageType: 'box',
+            quantity: 1
+        };
+
+        // Initialize Page Interactions
+        window.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            renderPatternPicker();
+            updateCustomizer();
+            
+            // Mobile Menu Toggle
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                const menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            });
+        });
+
+        // 1. Chart.js Market Scale Chart Initialization
+        function initChart() {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            
+            const labels = ['2019', '2020', '2021', '2022', '2023', '2024(E)', '2025(E)', '2026(E)', '2028(E)', '2030(E)', '2032(E)'];
+            const dataValues = [6.80, 7.30, 7.90, 8.53, 8.94, 9.40, 9.90, 10.42, 11.50, 12.60, 13.85];
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '亚太及中国药食同源糖果市场规模 (十亿美元)',
+                        data: dataValues,
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            return index <= 4 ? '#D97706' : '#C0392B';
+                        },
+                        borderRadius: 6,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` 市场规模: ${context.parsed.y} 十亿美元 (USD Billion)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 5,
+                            grid: {
+                                color: 'rgba(217, 119, 6, 0.1)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'B';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Herb Pharmacopoeia Tab Switching
+        function toggleHerbTab(herb, tab) {
+            const yaodianEl = document.getElementById(`${herb}-yaodian`);
+            const appEl = document.getElementById(`${herb}-app`);
+            const btnYaodian = document.getElementById(`${herb}-btn-yaodian`);
+            const btnApp = document.getElementById(`${herb}-btn-app`);
+
+            if (tab === 'yaodian') {
+                yaodianEl.classList.remove('hidden');
+                appEl.classList.add('hidden');
+                btnYaodian.className = "px-2.5 py-1 rounded-md font-bold bg-wan-gold text-white shadow-xs";
+                btnApp.className = "px-2.5 py-1 rounded-md text-wan-muted hover:text-wan-ink";
+            } else {
+                yaodianEl.classList.add('hidden');
+                appEl.classList.remove('hidden');
+                btnApp.className = "px-2.5 py-1 rounded-md font-bold bg-wan-gold text-white shadow-xs";
+                btnYaodian.className = "px-2.5 py-1 rounded-md text-wan-muted hover:text-wan-ink";
+            }
+        }
+
+        // 3. Pattern Filtering
+        function filterPatterns(category) {
+            const cards = document.querySelectorAll('.pattern-card');
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.classList.remove('hidden');
+                } else {
+                    if (card.classList.contains(category)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Update button styles
+            ['all', 'arch', 'beast'].forEach(c => {
+                const btn = document.getElementById(`filter-${c}`);
+                if (c === category) {
+                    btn.className = "px-5 py-2 rounded-full text-xs sm:text-sm font-bold bg-wan-red text-white shadow-xs transition-all";
+                } else {
+                    btn.className = "px-5 py-2 rounded-full text-xs sm:text-sm font-semibold text-wan-muted hover:text-wan-ink transition-all";
+                }
+            });
+        }
+
+        // 4. Pattern Modal Logic
+        function openPatternModal(id) {
+            const pattern = patternData.find(p => p.id === id);
+            if (!pattern) return;
+
+            const content = document.getElementById('pattern-modal-content');
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="relative h-64 bg-wan-yellow/20 rounded-xl overflow-hidden border border-wan-gold/30">
+                        <img src="${pattern.img}" alt="${pattern.name}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/FEF9E7/92400E?text=${encodeURIComponent(pattern.name)}';">
+                    </div>
+                    <div>
+                        <span class="seal-stamp text-xs mb-2">安徽非遗纹样 0${pattern.id}</span>
+                        <h3 class="text-2xl font-bold text-wan-ink font-serif mb-1">${pattern.name}</h3>
+                        <p class="text-xs text-wan-amber font-semibold mb-4">${pattern.sub}</p>
+                        <p class="text-xs sm:text-sm text-wan-muted leading-relaxed mb-6">${pattern.desc}</p>
+                        <button onclick="selectPatternAndCustom(${pattern.id})" class="bg-wan-red text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:bg-wan-darkred transition-colors">
+                            选用此纹样进行配方定制
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('pattern-modal').classList.remove('hidden');
+        }
+
+        function closePatternModal() {
+            document.getElementById('pattern-modal').classList.add('hidden');
+        }
+
+        function selectPatternAndCustom(id) {
+            closePatternModal();
+            state.patternId = id;
+            renderPatternPicker();
+            updateCustomizer();
+            // Scroll smoothly to shop customizer section
+            document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 5. Customizer Interactive Logic
+        function renderPatternPicker() {
+            const container = document.getElementById('pattern-picker');
+            container.innerHTML = patternData.map(p => `
+                <button onclick="selectPattern(${p.id})" class="p-1 rounded-lg border-2 ${state.patternId === p.id ? 'border-wan-red bg-wan-yellow/40' : 'border-wan-gold/20 hover:border-wan-gold'} transition-all text-center">
+                    <div class="w-full h-10 bg-wan-paper rounded overflow-hidden mb-1">
+                        <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/FEF9E7/92400E?text=${p.id}';">
+                    </div>
+                    <span class="text-[10px] font-bold ${state.patternId === p.id ? 'text-wan-red' : 'text-wan-muted'}">0${p.id}</span>
+                </button>
+            `).join('');
+        }
+
+        function selectFormula(fKey) {
+            state.formula = fKey;
+            ['kids', 'youth', 'elder'].forEach(k => {
+                const btn = document.getElementById(`form-btn-${k}`);
+                if (k === fKey) {
+                    btn.className = "formula-btn active p-4 rounded-xl border-2 border-wan-red bg-wan-paper text-left transition-all shadow-sm";
+                    btn.querySelector('span').className = "font-bold text-wan-red text-sm";
+                } else {
+                    btn.className = "formula-btn p-4 rounded-xl border-2 border-wan-gold/30 bg-wan-paper text-left hover:border-wan-gold transition-all";
+                    btn.querySelector('span').className = "font-bold text-wan-ink text-sm";
+                }
+            });
+            updateCustomizer();
+        }
+
+        function selectPattern(id) {
+            state.patternId = id;
+            renderPatternPicker();
+            updateCustomizer();
+        }
+
+        function adjustQty(delta) {
+            state.quantity = Math.max(1, state.quantity + delta);
+            document.getElementById('custom-qty').innerText = state.quantity;
+            updateCustomizer();
+        }
+
+        function updateCustomizer() {
+            const fObj = formulaData[state.formula];
+            const pObj = patternData.find(p => p.id === state.patternId);
+            const pkgSelect = document.getElementById('package-type');
+            state.packageType = pkgSelect.value;
+
+            // Calculate multiplier for packaging
+            let pkgMultiplier = 1;
+            if (state.packageType === 'box') pkgMultiplier = 1.0;
+            if (state.packageType === 'single') pkgMultiplier = 0.25;
+            if (state.packageType === 'gift') pkgMultiplier = 2.0;
+
+            const unitPrice = Math.round(fObj.basePrice * pkgMultiplier);
+            const totalPrice = unitPrice * state.quantity;
+
+            // Update UI Labels
+            document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+            document.getElementById('preview-formula-title').innerText = fObj.title;
+            document.getElementById('preview-ingredients').innerText = fObj.ingredients;
+            document.getElementById('preview-effect').innerText = fObj.effect;
+            document.getElementById('preview-pattern-name').innerText = `0${pObj.id}. ${pObj.name}`;
+            document.getElementById('preview-taste').innerText = fObj.taste;
+            document.getElementById('preview-img').src = pObj.img;
+            document.getElementById('preview-code').innerText = `CODE: WAN-2026-0${pObj.id}${state.formula.toUpperCase()}`;
+        }
+
+        // 6. Order Submission Seal Modal
+        function submitOrder() {
+            const fObj = formulaData[state.formula];
+            const pObj = patternData.find(p => p.id === state.patternId);
+            const totalPrice = document.getElementById('total-price').innerText;
+
+            document.getElementById('modal-order-id').innerText = `WAN-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+            document.getElementById('modal-order-formula').innerText = fObj.title;
+            document.getElementById('modal-order-pattern').innerText = `0${pObj.id}. ${pObj.name}`;
+            document.getElementById('modal-order-price').innerText = `¥ ${totalPrice}`;
+
+            document.getElementById('order-modal').classList.remove('hidden');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
